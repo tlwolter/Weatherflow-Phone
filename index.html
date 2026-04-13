@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>WeatherFlow Phone</title>
+  <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAYAAACqaXHeAAADE0lEQVR4nO1bwZHjIBBsXW0IisRvB8F9960QNowLwTmcgtjvKRLlwH6MDGiAGQTY6NxVW1u2pGG66cFIiAHtoIXnD1WyaNiIlHAKVXKtETRIXCnFDjLPc+hQ0ZxLBtsR5xD+u84AgN9j/FxCkCK5lwjCJk71qr7eE/nOjnGIw5GLHeJUwhEbP4IEBPDBiJ/FJVeAKHkO8S0QUwBmW2I+OQJs5I8Q34IJBWC0LeIkOTnY6znEt6CZAjDyYHH7xWynCvkSsNv3XMGah3BUIsmXIn7UATYCuUU5igQoTb4GiByjHFMl0BV54JGfVQ7RUogJ0B15A4kIIQG6JW/AFSFaApKbl1dGjAclwE6p3nrfgMh7xy3ogF6t74MoBQe+ADp2cu+483JcEB0Deu99gxgPW4DSj7BeGRvXnQPOUvs+QmOBEeB/6n0DDXgOOGvvG1Au4N4OnxZvAfAC9a/V85reHPDs+m8lgj8OVCuBy+XCOs8mrlV7N3zUCrwsS1KEf5/L44P1SEwrYJirpLVD1UFwWRYsy0Iec8gDwNX92MoJ1Rxgw3fDjrzBFTsnAHlumKYpenxdVwCeAOM4Ri+83W7yTO7glEQINUuiiQMMtnL4lF8rFSHWWfZM0BFgXdcmP4PDF6D/EAcSawNHSiKEp80Ehy/vC8HCSMkBsmkJ2NAKItLU9SWc0PW9QMmJkwaglVJaKaXN517+tOKf63Hs2wEGR0rhFAIcwVuA+/8BSC8i9A7vln8A3g5wBDi1C6jeB94O2AngvE5yFhd4PByOpAPOvi5ggxLgVGNBqPYNWGNAryJw8g4J4LigdYR6H4g7oOtSSFnfIFUCXYrAJQ8I5gG9iCBd4eIIsClYWoRpmpKPryWQviYL8B1AivAqbrBzke4bkEyFBxC/Ds8WgXh1f8uTg5x7AVKE1kL4bXIGPAq5T4UHANofE1ossZfaKmNw5LG4aVDP8+wkVkMIymG5vW6jxLqAKYndG+aR3koiVFJHe9xH1a2zqXFhHEcAj5XaGEoTrxLMQ9ZWWgPCLd1sng7hJbfP/wDcmpndPZzOswAAAABJRU5ErkJggg==">
+  <style>
+
+    /* ════════════════════════════════════════════════
+       COLOR SETTINGS — edit these to retheme
+    ════════════════════════════════════════════════ */
+    :root {
+      --color-outdoor:   #ff8c00;
+      --color-wind:      #00aaff;
+      --color-rain:      #44cc44;
+      --color-enviro:    #cc88ff;
+      --color-ui:        #ff6600;
+
+      --color-bg-page:   #000000;
+      --color-bg-card:   #0c0c0c;
+      --color-border:    #1e1e1e;
+    }
+    /* ════════════════════════════════════════════════ */
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body {
+      background: var(--color-bg-page);
+      width: 100%;
+      height: 100dvh;
+      overflow: hidden;
+    }
+
+    #dash {
+      width: 100%;
+      height: 100dvh;
+      background: var(--color-bg-page);
+      font-family: Arial, sans-serif;
+      display: flex;
+      flex-direction: column;
+      padding: 1.5vw;
+      gap: 1.5vw;
+    }
+
+    /* ── HEADER ── */
+    .hdr {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 1vw;
+      flex-shrink: 0;
+    }
+    .hdr-date { font-size: 3.8vw; font-weight: bold; color: var(--color-ui); }
+    .hdr-time { font-size: 3.8vw; font-weight: bold; color: var(--color-ui); }
+
+    /* ── GRID ── */
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: repeat(4, 1fr);
+      gap: 1.5vw;
+      flex: 1;
+      min-height: 0;
+    }
+
+    .card {
+      background: var(--color-bg-card);
+      border: 1px solid var(--color-border);
+      border-radius: 2vw;
+      padding: 1.5vw 2.5vw;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      overflow: hidden;
+      min-height: 0;
+    }
+
+    .lbl  { font-size: 3vw; font-style: italic; line-height: 1; margin-bottom: 0.4vh; white-space: nowrap; }
+    .val  { font-size: 10.5vw; font-weight: bold; line-height: 1; }
+    .unit { font-size: 4vw; font-weight: bold; }
+
+    .outdoor { color: var(--color-outdoor); }
+    .wind    { color: var(--color-wind);    }
+    .rain    { color: var(--color-rain);    }
+    .enviro  { color: var(--color-enviro);  }
+
+    .footer { font-size: 2.6vw; color: #333; text-align: center; flex-shrink: 0; padding-bottom: 0.5vw; }
+  </style>
+</head>
+<body>
+<div id="dash">
+
+  <div class="hdr">
+    <span class="hdr-date" id="hdr-date">--</span>
+    <span id="fetch-status" style="font-size:3vw;color:#555;">Loading...</span>
+    <span class="hdr-time" id="hdr-time">--</span>
+  </div>
+
+  <div class="grid">
+
+    <!-- Row 1: Temp | Feels Like -->
+    <div class="card">
+      <div class="lbl outdoor">Temperature</div>
+      <div class="val outdoor"><span id="temp">--</span><span class="unit">°F</span></div>
+    </div>
+    <div class="card">
+      <div class="lbl outdoor">Feels Like</div>
+      <div class="val outdoor"><span id="feels-like">--</span><span class="unit">°F</span></div>
+    </div>
+
+    <!-- Row 2: Dewpoint | Humidity -->
+    <div class="card">
+      <div class="lbl outdoor">Dewpoint</div>
+      <div class="val outdoor"><span id="dewpoint">--</span><span class="unit">°F</span></div>
+    </div>
+    <div class="card">
+      <div class="lbl outdoor">Humidity</div>
+      <div class="val outdoor"><span id="humidity">--</span><span class="unit">%</span></div>
+    </div>
+
+    <!-- Row 3: Wind Gust | Wind Dir -->
+    <div class="card">
+      <div class="lbl wind">Wind Gust</div>
+      <div class="val wind"><span id="wind-gust">--</span><span class="unit"> mph</span></div>
+    </div>
+    <div class="card">
+      <div class="lbl wind">10-Min Wind Dir</div>
+      <div class="val wind" id="wind-dir">--</div>
+    </div>
+
+    <!-- Row 4: Daily Rain | UV -->
+    <div class="card">
+      <div class="lbl rain">Daily Rain</div>
+      <div class="val rain"><span id="rain-today">--</span><span class="unit"> in</span></div>
+    </div>
+    <div class="card">
+      <div class="lbl enviro">UV Index</div>
+      <div class="val enviro" id="uv">--</div>
+    </div>
+
+  </div>
+
+  <div class="footer" id="footer-updated"></div>
+
+</div>
+<script>
+  // ── CONFIG ─────────────────────────────────────────
+  // Replace with your Cloudflare Worker URL once deployed
+  const API_URL         = 'https://YOUR-WORKER.YOUR-NAME.workers.dev';
+  const REFRESH_SECONDS = 60;
+  // ───────────────────────────────────────────────────
+
+  function degToDir(d){return['N','NNE','NE','ENE','E','ESE','SE','SSE','S','SSW','SW','WSW','W','WNW','NW','NNW'][Math.round(d/22.5)%16];}
+  function v(x,d=1){return(x===undefined||x===null)?'--':Number(x).toFixed(d);}
+  function set(id,txt){const e=document.getElementById(id);if(e)e.textContent=txt;}
+
+  async function fetchData(){
+    try{
+      set('fetch-status','...');
+      document.getElementById('fetch-status').style.color='#555';
+      const resp=await fetch(API_URL);
+      if(!resp.ok)throw new Error(`HTTP ${resp.status}`);
+      const d=await resp.json();
+      if(d.error)throw new Error(d.error);
+
+      set('fetch-status','Live ●');
+      document.getElementById('fetch-status').style.color='#44cc44';
+
+      set('temp',       v(d.tempf,1));
+      set('feels-like', v(d.feels_like,1));
+      set('dewpoint',   v(d.dew_point,1));
+      set('humidity',   v(d.humidity,0));
+      set('wind-gust',  v(d.wind_gust,1));
+      set('wind-dir',   degToDir(d.wind_direction)+' '+v(d.wind_direction,0)+'°');
+      set('rain-today', v(d.rain_today,2));
+      set('uv',         v(d.uv,1));
+
+      set('footer-updated','Updated: '+new Date().toLocaleTimeString());
+    }catch(e){
+      set('fetch-status','Err');
+      document.getElementById('fetch-status').style.color='#ff4444';
+    }
+  }
+
+  function updateClock(){
+    const n=new Date();
+    set('hdr-date',n.toLocaleDateString('en-US',{month:'short',day:'numeric'}));
+    set('hdr-time',n.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit',second:'2-digit'}));
+  }
+
+  updateClock();
+  setInterval(updateClock,1000);
+  fetchData();
+  setInterval(fetchData,REFRESH_SECONDS*1000);
+</script>
+</body>
+</html>
