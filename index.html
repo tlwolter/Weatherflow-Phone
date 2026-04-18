@@ -175,7 +175,7 @@
       set('humidity',   v(d.humidity,0));
       set('wind-gust',  v(d.wind_gust,1));
       set('wind-dir',   degToDir(d.wind_direction)+' '+v(d.wind_direction,0)+'°');
-      set('rain-today', v(d.rain_today,2));
+      set('rain-today', v(d.rain_today/25.4,2));
       set('uv',         v(d.uv,1));
 
       set('footer-updated','Updated: '+new Date().toLocaleTimeString());
